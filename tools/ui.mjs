@@ -1,0 +1,15 @@
+import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox', '--autoplay-policy=no-user-gesture-required'] });
+const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+const errs = []; page.on('pageerror', (e) => errs.push(e.message)); page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+await page.goto('file://' + process.cwd() + '/index.html');
+await page.waitForFunction(() => document.getElementById('play') && !document.getElementById('play').disabled, null, { timeout: 120000 });
+await page.screenshot({ path: 'shots/ui_start.png' });
+await page.click('#play');
+await page.evaluate(() => { const f = window.__film; f.seek(412); f.dirty(); });
+await page.waitForTimeout(2500);
+await page.mouse.move(600, 600);
+await page.waitForTimeout(500);
+await page.screenshot({ path: 'shots/ui_play.png' });
+console.log('errors', errs);
+await browser.close();

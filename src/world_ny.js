@@ -227,8 +227,8 @@ export class NYWorld extends World {
     for (const o of this.destruct) {
       const a = T - o.d.t;
       if (a < 0) { o.m.visible = true; o.m.scale.y = 1; o.m.rotation.set(0, 0, 0); o.m.position.y = 0; o.rub.visible = false; continue; }
-      const u = clamp(a / 4.5);
-      const e = u * u;
+      const u = clamp(a / 3.6);
+      const e = u * u * (3 - 2 * u);
       o.m.scale.y = Math.max(0.03, 1 - e * 0.98);
       o.m.position.y = 0;
       o.m.rotation.z = Math.sin(a * 9) * 0.015 * (1 - u) * (u < 1 ? 1 : 0);

@@ -86,6 +86,7 @@ export class Human {
     this.gun = null;
     if (o.gun) { this.gun = this._gun(); this.elR.add(this.gun); }
     this.pose(POSE0);
+    this.face(0.12);
   }
   _face(o, sk, hair) {
     const h = this.head;

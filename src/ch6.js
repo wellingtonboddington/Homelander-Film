@@ -18,6 +18,7 @@ export function ch6(x) {
     const T = k.T, g = (key, amt = 0.8) => (sp(key, T) ? P.gesture(T, amt) : P.stand(T));
     ring('general', -1.45, 4.2, P.blend(P.stand(T), { hx: 0.3, sx: 0.12 }, 1)); ring('neuman', -0.45, 4.3, g('N', 0.9)); ring('edgar', -2.55, 4.15, g('E', 0.5)); ring('ashley', -2.95, 4.5, P.stand(T));
     ring('staff0', 0.55, 4.6, P.idle(T)); ring('staff1', 2.3, 4.7, P.idle(T)); ring('staff2', 2.9, 4.6, P.idle(T)); ring('staff3', -3.4, 4.6, P.idle(T));
+    ['general', 'neuman', 'edgar', 'ashley', 'staff0', 'staff1', 'staff2', 'staff3'].forEach((n) => SIT.actors[n].face(-0.35));
   };
   shot(515, 523, 'sit', C({ p: [[1.2, 1.75, 7.2], [0.4, 1.6, 5.4]], l: [[-0.5, 1.5, -2.2], [-1.2, 1.5, -3]], fov: [42, 36], hand: 0.3 }), { act: (k) => { SIT.screenMode = 1; SIT.alarmOn = 0; room(k); }, holdBlack: 4.5, fadeIn: 1.2 });
   say('N', 519.9, 2.8, 'Stan, you can’t. We’re still standing.');

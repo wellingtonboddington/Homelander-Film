@@ -141,7 +141,7 @@ export function ch5(x) {
   NY.beams.add({ a: [...hp(473.4).map((v, i) => v + [0.12, 0, 0][i])], b: [9, 17.6, -62], t0: 473.4, dur: 0.9, w: 0.14, color: 0xff3a2a, opacity: 1 });
   NY.beams.add({ a: [...hp(473.4).map((v, i) => v + [-0.12, 0, 0][i])], b: [9, 17.6, -62], t0: 473.4, dur: 0.9, w: 0.14, color: 0xff3a2a, opacity: 1 });
   NY.boom(474.1, 9.5, 17.5, -60, 1.6); NY.boom(474.9, ...s2h, 3.8); NY.boom(475.3, 10, 9, -56, 3.2); NY.fx.dustBurst(10, 2, -56, 476, 7, 26); NY.burn(10, 3, -56, 476, 700, 2.2);
-  shot(470, 475.5, 'ny', C({ p: [[-44, 36, 6], [-40, 30, -4]], l: (u, k) => { const h = hp(Math.min(k.T, 475.2)); return [lerp(h[0], 10, 0.55), lerp(h[1], 17, 0.55), lerp(h[2], -57, 0.55)]; }, fov: [48, 44], hand: 0.4, shake: 0.06, shakeEnv: (lt) => (lt > 3.6 ? 1 : 0.3) }), {
+  shot(470, 475.5, 'ny', C({ p: [[-38, 22, -14], [-36, 20, -26]], l: (u, k) => { const h = hp(Math.min(k.T, 475.2)); return [lerp(h[0], 10, 0.55), lerp(h[1], 17, 0.55), lerp(h[2], -57, 0.55)]; }, fov: [48, 44], hand: 0.4, shake: 0.06, shakeEnv: (lt) => (lt > 3.6 ? 1 : 0.3) }), {
     act: (k) => { const T = k.T, w = k.w; const h = hp(Math.min(T, 475.4)); w.put('homelander', h[0], h[1], h[2], N, T < 474.5 ? P.fly(T, 0) : P.punch(clamp((T - 474.5) / 0.9)), { flow: 0.8, heat: T > 473.4 && T < 474.4, scorch: 0.6 }); w.actors.homelander.face(-0.6);
       w.put('starlight', -5.2, 0, -35.2, N, P.dead()); } });
   cue(470.2, 'whoosh', { dur: 2, g: 0.45 }, 'ny'); cue(473.4, 'laser', { dur: 0.9, g: 0.3 }, 'ny'); cue(474.8, 'hit', { g: 1 }); cue(470, 'riser', { dur: 4.4, g: 0.15 });

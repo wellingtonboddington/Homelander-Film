@@ -164,13 +164,15 @@ export class Film {
   start() {
     const loop = (now) => {
       requestAnimationFrame(loop);
-      if (document.hidden) { this._lastTs = now; return; }
+      if (document.hidden) { this._lastTs = now; if (this.playing) { this._autoPaused = true; this.pause(); } return; }
+      if (this._autoPaused) { this._autoPaused = false; this.play(); }
       const dt = Math.max(0, Math.min(0.25, (now - this._lastTs) / 1000)); this._lastTs = now;
       if (this.playing) {
         this.T += dt;
         if (this.T >= this.total) { this.T = this.total - 0.001; this.pause(); this.onEnd && this.onEnd(); }
       }
       const minInt = 1000 / this.quality.fps - 4;
+      if (!this.playing && !this._dirty) return;
       if (now - this._lastRender < minInt && !this._dirty) return;
       const interval = now - this._lastRender; this._lastRender = now; this._dirty = false;
       if (this.playing) this._adapt(interval);
