@@ -48,7 +48,7 @@ export function ch1(x) {
   say('H', 60.2, 4.6, 'Ten thousand gone in nine minutes. Not one of them got to say my name.');
 
   // face
-  shot(67, 75, 'ny', C({ p: [[-23.2, 190.9, -47.3], [-24.4, 190.85, -48.0]], l: [[-29, 191.15, -50], [-29, 191.2, -50]], fov: [26, 22], hand: 0.3 }), {
+  shot(67, 75, 'ny', C({ p: [[-23.2, 190.9, -47.3], [-24.4, 190.85, -48.0]], l: [[-29, 191.2, -50], [-29, 191.2, -50]], fov: [14, 11], hand: 0.3 }), {
     act: (k) => { const a = k.w.put('homelander', hPos[0], hPos[1], hPos[2], Math.PI / 2 + 0.55, P.hero(k.T), { flow: 0.25, smile: 0.9 }); a.head.rotation.y = 0.0; } });
   say('H', 68.2, 3.2, 'They’ll say it tonight.');
   cue(72, 'radio', {}, 'ny'); say('ASH', 72.4, 2.8, 'Homelander. Mr. Edgar needs the Seven in the boardroom. Now.', { radio: true });

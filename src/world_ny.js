@@ -222,7 +222,7 @@ export class NYWorld extends World {
     // vortices
     this.vorts.forEach((o, i) => o.v.update(T, (T - o.t) / 14 * (T < 600 ? 1 : 1), 0));
     this.horizonGlow.material.opacity = clamp((T - 100) / 40) * (T < 146 ? 1 : 0) * 0.5;
-    this.crowd.update(T, this.film.camera.position); this.capeHold.visible = !!this.capeHoldOn; this.lighter.material.opacity = this.lighterOn ? 0.8 + 0.2 * Math.sin(T * 17) : 0; this.pods.update(T); this.crabs.update(T);
+    this.crowd.update(T, this.film.camera.position); this.capeHold.visible = T >= 538; this.lighter.material.opacity = T >= 538 ? 0.8 + 0.2 * Math.sin(T * 17) : 0; this.pods.update(T); this.crabs.update(T);
     // destructibles
     for (const o of this.destruct) {
       const a = T - o.d.t;

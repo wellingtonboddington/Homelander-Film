@@ -21,5 +21,6 @@
     "esbuild": "^0.28.2",
     "playwright-core": "^1.63.0",
     "three": "^0.186.1"
-  }
+  },
+  "type": "module"
 }

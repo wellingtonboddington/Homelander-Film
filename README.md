@@ -4,10 +4,10 @@ A 10-minute 3D animated fan short film (The Boys × Half-Life 2's *Seven Hours W
 
 **Watch it:** open `index.html` (double-click). Press **PLAY**. No install, no network, no downloads — it is one self-contained file.
 
-* Space — pause · ←/→ — seek 10 s · F — fullscreen · M — mute · C — captions · hover for the control bar
+* Space — pause · ←/→ — seek 10 s · F — fullscreen · M — mute · C — captions · V — voices on/off · hover for the control bar
 * Performance menu on the start screen: *Battery saver* (30 fps, 0.7× render scale), *Balanced* (30 fps — default), *High* (60 fps).
   The film is capped at 30 fps by default, renders only the letter-boxed 2.39:1 picture area, auto-lowers resolution if frames run long, and pauses completely when the tab is hidden — built to stay inside a small charger's power budget on a laptop with no battery.
-* Optional: "Spoken dialogue" uses your browser's built-in text-to-speech voices. Dialogue is always subtitled.
+* "Spoken dialogue" uses your browser's built-in text-to-speech voices (on by default when available). Each line is spoken once, strictly one at a time, and the film waits for the speech engine's own "finished" event before moving on, so nothing is cut off or talked over. Dialogue is always subtitled.
 
 ## Rebuilding
 ```

@@ -85,7 +85,7 @@ export function ch5(x) {
   say('S', 439.0, 1.6, 'Kevin?'); say('M', 441.0, 1.5, 'Annie… that’s not him.');
   cue(438, 'moan', { dur: 2.4, g: 0.16, f: 96 }, 'ny'); cue(440.5, 'moan', { dur: 2.2, g: 0.14, f: 80 }, 'ny'); cue(439, 'crabs', { n: 4, dt: 0.6, g: 0.06 }, 'ny');
   NY.beams.add({ a: [-3.4, 1.4, -28.8], b: [-2.0, 1.6, -33.6], t0: 445.3, dur: 0.5, w: 0.2, color: 0xfff4b0 }); NY.flashL.add(-2.5, 1.7, -31, 445.3, 0.6, 1800, 0xfff0a0); NY.fx.explosion(-2, 1.6, -33.8, 445.4, 0.6);
-  shot(442.5, 447, 'ny', C({ p: [[-4.2, 1.65, -42.6], [-4.0, 1.6, -41.0]], l: [[-3.2, 1.45, -28], [-3.2, 1.5, -28]], fov: [30, 26], hand: 0.4 }), {
+  shot(442.5, 447, 'ny', C({ p: [[-4.2, 1.65, -42.6], [-4.0, 1.6, -41.0]], l: [[-3.2, 1.5, -28], [-3.2, 1.55, -28]], fov: [16, 12], hand: 0.4 }), {
     act: (k) => { const T = k.T, w = k.w, lt = k.lt;
       w.put('starlight', -3.2, 0, -28, 0, T > 445.1 && T < 446 ? P.blend(P.idle(T), P.aim(T), 1) : P.idle(T)); w.actors.starlight.face(T > 445.3 ? -0.9 : -0.2);
       if (T < 445.5) w.put('zdeep', -2.3, 0, lerp(-48, -31.6, clamp((T - 442.5) / 2.6)), 0, P.zombie(lt * 3.4)); } });
@@ -161,7 +161,7 @@ export function ch5(x) {
   shot(481, 487, 'ny', C({ p: [[-1.0, 1.1, -43], [0.4, 1.4, -44.5]], l: [[0, 28, -140], [0, 20, -150]], fov: [44, 38], hand: 0.3 }), { act: front });
   say('ADV', 480.8, 3.4, 'Specimen designation: superior. Your biology is… remarkable.'); cue(479, 'horn', { dur: 6, f: 44, g: 0.5 }); cue(479, 'portal', { dur: 10, g: 0.3 }); cue(488.2, 'stomp', { g: 1.2 }, 'ny');
   cue(480, 'dropship', { dur: 20, g: 0.3 }, 'ny');
-  shot(487, 493, 'ny', C({ p: [[3.2, 1.65, -42], [2.0, 1.68, -43.2]], l: [[0.4, 1.7, -48], [0.4, 1.72, -48]], fov: [28, 22], hand: 0.3 }), { act: (k) => front(k, { smile: 0.35 }) });
+  shot(487, 493, 'ny', C({ p: [[3.2, 1.65, -42], [2.0, 1.68, -43.2]], l: [[0.4, 1.72, -48], [0.4, 1.74, -48]], fov: [15, 12], hand: 0.3 }), { act: (k) => front(k, { smile: 0.35 }) });
   say('ADV', 484.6, 4.2, 'The Union does not destroy what it can use. Kneel, and be elevated.'); say('S', 489.2, 2.4, 'John… they’ll make you a thing.');
 
   /* ---------- the last stand ---------- */

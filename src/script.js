@@ -3,6 +3,7 @@ import { VegasWorld } from './world_vegas.js';
 import { BoardWorld, SitWorld, HideWorld, CorrWorld } from './world_interior.js';
 import { AirWorld } from './world_air.js';
 import { kf } from './util.js';
+import { P } from './models.js';
 import { PathB } from './common.js';
 import { estDur } from './lines.js';
 import { ch1 } from './ch1.js';
@@ -73,6 +74,11 @@ export async function buildFilm(film, progress) {
   let last = 0;
   for (const s of shots) { if (Math.abs(s.t0 - last) > 0.001 && s.t0 !== last) console.warn('shot gap/overlap at', last, '->', s.t0); last = s.t1; }
   film.shots = shots; film.total = 600;
+  if (location.search.includes('test=chars')) {
+    const names = ['homelander', 'starlight', 'maeve', 'atrain', 'deep', 'noir', 'soldierboy', 'butcher', 'hughie', 'mm', 'kimiko'];
+    film.shots = [{ t0: 0, t1: 600, world: 'ny', cam: () => {}, act: (k) => { names.forEach((n, i) => k.w.put(n, 300 - 13 + i * 2.6, 0, 320, 0, P.stand(k.T), { flow: 0 })); k.w.putSoldier(0, 279, 0, 320, 0, P.stand(k.T)); k.w.putCiv(0, 281.6, 0, 320, 0, P.stand(k.T)); k.w.putCiv(1, 284.2, 0, 320, 0, P.stand(k.T)); k.w.putZ(0, 276.4, 0, 320, 0, P.zombie(k.T)); k.w.put('zdeep', 273.8, 0, 320, 0, P.stand(k.T)); } }];
+    film.subs = []; film.overlays = [];
+  }
   film.clockAt = (T) => {
     if (T < 46 || T > 560) return '';
     const s = Math.round(kf(WAR_CLOCK, T)); const h = (s / 3600) | 0, m = ((s % 3600) / 60) | 0, sec = s % 60;

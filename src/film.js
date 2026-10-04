@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { FXU } from './fx.js';
 import { clamp, smooth } from './util.js';
 import { Speech } from './speech.js';
+import { Human } from './model/human.js';
 
 export const ASPECT = 2.39;
 
@@ -85,6 +86,7 @@ export class Film {
   }
 
   frame(T) {
+    Human.T = T; Human.talk = new Set(this.talkKeys || []);
     const shot = this.shotAt(T);
     if (shot !== this.cur) {
       if (this.curWorld) this.curWorld.group.visible = false;

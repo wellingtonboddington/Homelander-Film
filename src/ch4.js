@@ -105,13 +105,13 @@ export function ch4(x) {
 
   /* ---- Frenchie ---- */
   const fz = -54;
-  shot(376, 382, 'corr', C({ p: [[-1.6, 1.62, fz + 5.2], [-1.2, 1.64, fz + 4.4]], l: [[0.3, 1.5, fz], [0.3, 1.52, fz]], fov: [36, 31], hand: 0.5 }), {
+  shot(376, 382, 'corr', C({ p: [[-1.6, 1.62, fz + 5.2], [-1.2, 1.64, fz + 4.4]], l: [[0.3, 1.55, fz], [0.3, 1.57, fz]], fov: [24, 20], hand: 0.5 }), {
     act: (k) => { const T = k.T; bg('frenchie', 0.4, fz, 0, x.sp('F', T) ? P.gesture(T, 0.8) : P.idle(T)); bg('kimiko', -0.7, fz + 1.2, 0.3, P.idle(T)); bg('mm', 1.2, fz + 1.2, 0.0, P.aim(T)); CORR.actors.frenchie.face(0.35); } });
   say('F', 376.4, 3.2, 'Zee door only closes from zis side. Someone must stay.');
   say('K', 379.6, 2.2, '[signs] No.', { silent: true });
   cue(376, 'melody', { notes: [[0, 62, 2], [1.6, 65, 2], [3.2, 69, 2.4], [5.6, 67, 1.6], [7.2, 65, 1.6], [8.8, 62, 3.6]], g: 0.15, type: 'triangle' });
 
-  shot(382, 388.4, 'corr', C({ p: [[-1.0, 1.62, fz + 4.4], [-0.3, 1.64, fz + 3.6]], l: [[0.4, 1.5, fz], [0.4, 1.52, fz]], fov: [34, 29], hand: 0.4 }), {
+  shot(382, 388.4, 'corr', C({ p: [[-1.0, 1.62, fz + 4.4], [-0.3, 1.64, fz + 3.6]], l: [[0.4, 1.55, fz], [0.4, 1.57, fz]], fov: [22, 17], hand: 0.4 }), {
     act: (k) => { const T = k.T; bg('frenchie', 0.4, fz, 0, P.idle(T)); CORR.actors.frenchie.face(0.5); bg('kimiko', -0.9, fz + 1.4, 0.5, P.cower(T)); } });
   say('F', 382.4, 3.0, 'Kimiko. Mon amour. Go. Live. Zat is not a request.');
   say('BU', 385.8, 2.2, 'Frenchie— thank you.');

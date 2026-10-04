@@ -115,41 +115,64 @@ export class CrabSwarm {
   }
 }
 
-/* ---------- instanced civilians ---------- */
+/* ---------- instanced civilians (articulated low-poly people) ---------- */
+import { loft as _loft, tube as _tube, merge as _merge, xf as _xf, sphereG as _sph, paint as _paint } from './model/geo.js';
+let _crowdGeo = null;
+function crowdGeo() {
+  if (_crowdGeo) return _crowdGeo;
+  const W = [1, 1, 1];
+  const torso = _merge([
+    _loft([{ y: 0.9, rx: 0.15, rz: 0.1 }, { y: 1.15, rx: 0.16, rz: 0.105 }, { y: 1.4, rx: 0.19, rz: 0.115 }, { y: 1.52, rx: 0.17, rz: 0.1 }, { y: 1.58, rx: 0.06, rz: 0.06 }], { seg: 10, color: W }),
+    _tube([[0.2, 1.5, 0], [0.24, 1.25, 0.06], [0.2, 1.05, 0.2]], { radius: 0.042, seg: 5, color: W, steps: 4 }),
+    _tube([[-0.2, 1.5, 0], [-0.24, 1.25, 0.06], [-0.2, 1.05, 0.2]], { radius: 0.042, seg: 5, color: W, steps: 4 }),
+  ]);
+  const head = _merge([_xf(_sph(0.105, 10, 8, [1, 1, 1]), { p: [0, 1.72, 0.0], s: [0.9, 1.1, 1] }), _xf(_sph(0.11, 10, 6, [0.22, 0.2, 0.2]), { p: [0, 1.76, -0.012], s: [0.92, 0.8, 1.02] })]);
+  const leg = _merge([_tube([[0, 0, 0], [0, -0.45, 0.02], [0, -0.88, 0]], { radius: (t) => 0.075 - 0.03 * t, seg: 6, color: W, steps: 5 }), _xf(_sph(0.06, 6, 5, [0.15, 0.15, 0.15]), { p: [0, -0.9, 0.06], s: [0.9, 0.6, 1.8] })]);
+  _crowdGeo = { torso, head, leg }; return _crowdGeo;
+}
 export class Crowd {
-  constructor(n, parent, { x0 = -10, x1 = 10, z0 = -200, z1 = 60, seed = 3, t0 = 0, calm = 1.2, panicT = 146, panic = 5.2, fadeT = 520 } = {}) {
-    this.n = n; this.o = { x0, x1, z0, z1, t0, calm, panicT, panic, fadeT };
-    const r = rng(seed);
-    this.body = new THREE.InstancedMesh(new THREE.CapsuleGeometry(0.22, 0.9, 3, 6), M.lam(0xffffff), n);
-    this.head = new THREE.InstancedMesh(new THREE.SphereGeometry(0.15, 6, 5), M.lam(0xd9a98a), n);
+  constructor(n, parent, { x0 = -10, x1 = 10, z0 = -200, z1 = 60, seed = 3, t0 = 0, calm = 1.2, panicT = 146, panic = 5.2, fadeT = 520, fadeStart } = {}) {
+    this.n = n; this.o = { x0, x1, z0, z1, t0, calm, panicT, panic, fadeT, fadeStart };
+    const r = rng(seed); const G = crowdGeo();
+    const mat = new THREE.MeshLambertMaterial({ vertexColors: true });
+    this.torso = new THREE.InstancedMesh(G.torso, mat, n); this.head = new THREE.InstancedMesh(G.head, mat, n);
+    this.legL = new THREE.InstancedMesh(G.leg, mat, n); this.legR = new THREE.InstancedMesh(G.leg, mat, n);
     this.data = [];
-    const cs = [0x8a3a3a, 0x3a6a8a, 0x6a8a3a, 0xc9a23a, 0x5a5a6a, 0x8a5a9a, 0xb0b0b0, 0x222222];
+    const cs = [0x8a3a3a, 0x3a6a8a, 0x6a8a3a, 0xc9a23a, 0x5a5a6a, 0x8a5a9a, 0xb0b0b0, 0x2a2a30, 0x9a5a2a, 0x2a6a5a], sk = [0xe0b496, 0xb98363, 0x7a4f35, 0xf0c8aa, 0x9a6a48], pants = [0x2a3040, 0x4a4a52, 0x2a2a2a, 0x5a4a3a, 0x1a2a4a];
     for (let i = 0; i < n; i++) {
-      this.body.setColorAt(i, new THREE.Color(cs[(r() * cs.length) | 0]));
-      this.data.push({ x: lerp(x0, x1, r()), z: lerp(z0, z1, r()), dir: r() < 0.7 ? 1 : -1, s: 0.8 + r() * 0.5, ph: r() * 6 });
+      this.torso.setColorAt(i, new THREE.Color(cs[(r() * cs.length) | 0])); this.head.setColorAt(i, new THREE.Color(sk[(r() * sk.length) | 0]));
+      const pc = new THREE.Color(pants[(r() * pants.length) | 0]); this.legL.setColorAt(i, pc); this.legR.setColorAt(i, pc);
+      this.data.push({ x: lerp(x0, x1, r()), z: lerp(z0, z1, r()), dir: r() < 0.7 ? 1 : -1, s: 0.8 + r() * 0.5, ph: r() * 6, h: 0.9 + r() * 0.2 });
     }
-    this.body.frustumCulled = false; this.head.frustumCulled = false;
-    parent.add(this.body, this.head);
-    this._m = new THREE.Matrix4(); this._q = new THREE.Quaternion(); this._p = new THREE.Vector3(); this._s = new THREE.Vector3(1, 1, 1); this._e = new THREE.Euler();
+    [this.torso, this.head, this.legL, this.legR].forEach((m) => { m.frustumCulled = false; parent.add(m); });
+    this._m = new THREE.Matrix4(); this._q = new THREE.Quaternion(); this._p = new THREE.Vector3(); this._s = new THREE.Vector3(1, 1, 1); this._e = new THREE.Euler(); this._q2 = new THREE.Quaternion();
   }
   update(T, cam) {
     const o = this.o; const span = o.z1 - o.z0;
-    const cnt = T > o.fadeT ? 0 : Math.floor(this.n * (1 - clamp((T - (o.fadeStart ?? 1e9)) / Math.max(1, o.fadeT - (o.fadeStart ?? 1e9)))));
-    this.body.count = this.head.count = cnt;
+    const fs = o.fadeStart ?? 1e9;
+    const cnt = T > o.fadeT ? 0 : Math.floor(this.n * (1 - clamp((T - fs) / Math.max(1, o.fadeT - fs))));
+    this.torso.count = this.head.count = this.legL.count = this.legR.count = cnt;
     const travel = o.calm * Math.min(T, o.panicT) + o.panic * Math.max(0, T - o.panicT);
+    const panic = T > o.panicT;
     for (let i = 0; i < cnt; i++) {
       const d = this.data[i];
       let z = d.z + d.dir * travel * d.s; z = o.z0 + (((z - o.z0) % span) + span) % span;
       const near = cam && Math.hypot(d.x - cam.x, z - cam.z) < 6.5 && cam.y < 8;
-      const bob = Math.abs(Math.sin(T * 6 * d.s + d.ph)) * 0.06 * (T > o.panicT ? 2 : 1);
-      this._e.set(0.15 * (T > o.panicT ? 1 : 0), d.dir > 0 ? 0 : Math.PI, 0);
-      this._q.setFromEuler(this._e);
-      this._p.set(d.x + Math.sin(T * 0.5 + d.ph) * 0.4, 0.85 + bob, z);
-      const sc = near ? 0.0001 : 1; this._s.set(sc, sc, sc);
-      this._m.compose(this._p, this._q, this._s); this.body.setMatrixAt(i, this._m);
-      this._p.y = 1.7 + bob; this._m.compose(this._p, this._q, this._s); this.head.setMatrixAt(i, this._m);
+      const sc = near ? 0.0001 : d.h; this._s.set(sc, sc, sc);
+      const sw = Math.sin(T * (panic ? 11 : 5) * d.s + d.ph); const bob = Math.abs(sw) * (panic ? 0.07 : 0.025);
+      const yaw = d.dir > 0 ? 0 : Math.PI; const lean = panic ? 0.28 : 0.03;
+      this._e.set(lean, yaw, 0); this._q.setFromEuler(this._e);
+      this._p.set(d.x + Math.sin(T * 0.5 + d.ph) * 0.4, bob * d.h, z);
+      this._m.compose(this._p, this._q, this._s); this.torso.setMatrixAt(i, this._m); this.head.setMatrixAt(i, this._m);
+      for (const [mesh, side] of [[this.legL, 1], [this.legR, -1]]) {
+        const a = sw * (panic ? 0.95 : 0.5) * side;
+        this._e.set(-a + lean * 0.5, yaw, 0); this._q2.setFromEuler(this._e);
+        this._p.set(d.x + Math.sin(T * 0.5 + d.ph) * 0.4, (0.9 + bob) * d.h, z);
+        const off = new THREE.Vector3(0.09 * side, 0, 0).applyQuaternion(this._q2); this._p.add(off);
+        this._m.compose(this._p, this._q2, this._s); mesh.setMatrixAt(i, this._m);
+      }
     }
-    this.body.instanceMatrix.needsUpdate = this.head.instanceMatrix.needsUpdate = true;
+    [this.torso, this.head, this.legL, this.legR].forEach((m) => (m.instanceMatrix.needsUpdate = true));
   }
 }
 
