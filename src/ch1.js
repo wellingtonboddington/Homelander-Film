@@ -75,21 +75,21 @@ export function ch1(x) {
   shot(81, 89.5, 'board', C({ p: [[11.0, 2.1, 5.6], [7.6, 1.75, 4.5]], l: [[-2, 1.3, -0.5], [-1, 1.25, -0.2]], fov: [48, 42], hand: 0.3 }), { act: (k) => act0(k, { noHome: true }) });
   lower(81.5, 83.3, 'QUEEN MAEVE', 'The Seven', '#d6b3ff'); lower(83.3, 85.1, 'STARLIGHT', 'The Seven', '#fff2a8'); lower(85.1, 86.9, 'A-TRAIN', 'The Seven — World’s Fastest Man', '#7ab8ff');
   lower(86.9, 88.7, 'THE DEEP', 'The Seven', '#6fe3d8'); lower(88.7, 90.5, 'BLACK NOIR', 'The Seven', '#cfcfcf');
-  say('ASH', 83.4, 2.9, 'Everyone’s here. Except Homelander. Naturally.'); say('E', 86.6, 2.9, 'He’ll come. He wants an audience.');
+  say('ASH', 82.6, 2.9, 'Everyone’s here. Except Homelander. Naturally.'); say('E', 85.5, 2.9, 'He’ll come. He wants an audience.');
   cue(81, 'static', { dur: 0.3, g: 0.05 }, 'board');
 
   shot(89.5, 99, 'board', C({ p: [[2.8, 1.55, 3.4], [1.6, 1.6, 2.3]], l: [[0, 1.65, -6.5], [0, 1.7, -6.5]], fov: [40, 36], hand: 0.3 }), { act: (k) => act0(k) });
-  say('H', 90.6, 3.0, 'Sorry I’m late. Traffic.'); say('E', 94.0, 5.0, 'Las Vegas stopped transmitting at 3:12 Pacific. We have satellite images of… whatever those are.');
+  say('H', 90.0, 2.6, 'Sorry I’m late. Traffic.'); say('E', 92.9, 3.9, 'Las Vegas went silent at 3:12 Pacific. Satellites show… something.');
 
   shot(99, 106, 'board', C({ p: [[-3.2, 1.5, -4.4], [-1.6, 1.45, -4.2]], l: [[0.5, 1.2, 2.2], [0.8, 1.2, 2.0]], fov: [36, 32], hand: 0.3 }), { act: (k) => act0(k) });
-  say('S', 99.3, 3.4, 'People are dying out there. Why are we still sitting here?'); say('E', 103.0, 3.0, 'Because the same signature is forming over Manhattan. Forty minutes. Maybe less.');
+  say('S', 97.3, 3.4, 'People are dying out there. Why are we still sitting here?'); say('E', 101.5, 3.0, 'Because the same signature is forming over Manhattan. Forty minutes. Maybe less.');
   cue(104.2, 'thunder', { dur: 2.5, g: 0.5 }, 'board');
 
   shot(106, 114, 'board', C({ p: [[-2.5, 1.45, 4.6], [-0.5, 1.5, 4.4]], l: [[1, 1.25, -2.0], [1.6, 1.25, -2.0]], fov: [38, 34], hand: 0.3 }), {
     act: (k) => act0(k, { sb: (kk) => { const lt = kk.lt; const x = lerp(-9.5, 3.4, smooth(lt / 5.5)); kk.w.put('soldierboy', x, 0, 5.0 - 0.12 * Math.sin(lt), lt < 5.5 ? Math.PI * 0.62 : Math.PI, lt < 5.5 ? P.walk(lt * 5.2, 0.7) : P.arms_crossed(kk.T)); } }) });
   lower(107.4, 110.4, 'SOLDIER BOY', 'Ex-Payback · Back In The Game', '#ffa04a');
-  say('D', 106.4, 3.2, 'Quick question. Any chance they’re, uh… water-based?'); say('A', 109.7, 2.2, 'Pretty sure they’re not, Kevin.');
-  say('SB', 112.0, 2.6, 'Aliens? I fought Nazis. Point me at one.');
+  say('D', 106.3, 3.2, 'Quick question. Any chance they’re, uh… water-based?'); say('A', 109.6, 2.2, 'Pretty sure they’re not, Kevin.');
+  say('SB', 112.3, 2.6, 'Aliens? I fought Nazis. Point me at one.');
 
   shot(114, 116.6, 'board', C({ p: [[-2.2, 1.6, 3.8], [-3.6, 1.6, 3.2]], l: [[-11, 2.4, -0.4], [-11, 2.4, -0.4]], fov: [46, 40], hand: 0.2 }), { act: (k) => act0(k, { noHome: false }) });
   shot(116.6, 119.5, 'board', C({ p: [[-1.6, 1.38, -1.1], [-1.4, 1.36, -0.5]], l: [[-1.2, 1.3, 1.97], [-1.2, 1.3, 1.97]], fov: [30, 26], hand: 0.3 }), { act: (k) => { act0(k, { noHome: false }); k.w.actors.maeve.face(-0.3); } });
@@ -107,14 +107,14 @@ export function ch1(x) {
   };
   shot(119.5, 127, 'hide', C({ p: [[0.5, 1.5, 4.8], [0.4, 1.5, 3.4]], l: [[0, 1.3, -1.2], [0.2, 1.4, -0.4]], fov: [42, 36], hand: 0.3 }), { act: hide, fadeIn: 1.6, holdBlack: 0.4 });
   lower(120, 122, 'BILLY BUTCHER', 'The Boys', '#e8e8e8'); lower(122, 124, 'HUGHIE CAMPBELL', 'The Boys', '#a8d0ff');
-  say('HU', 120.6, 3.6, 'Billy… those things walked through a casino like it was a sandbox.'); say('BU', 124.4, 3.0, 'Aye. And in an hour Homelander’s gonna try to punch one on live telly.');
+  say('HU', 119.9, 3.6, 'Billy, those things walked through a casino like a sandbox.'); say('BU', 123.8, 3.0, 'Aye. Homelander’s gonna punch one on live telly.');
   cue(119.5, 'static', { dur: 0.4, g: 0.05 }, 'hide');
 
   shot(127, 135, 'hide', C({ p: [[4.8, 1.5, 3.6], [1.2, 1.5, 3.6]], l: [[2.4, 1.3, 0.1], [-2.4, 1.2, 0.5]], fov: [38, 40], hand: 0.3 }), { act: hide });
   lower(127.4, 129.4, 'MOTHER’S MILK', 'The Boys', '#c9ff9a'); lower(129.4, 131.4, 'FRENCHIE', 'The Boys', '#ffb0d0');
-  say('MM', 127.6, 3.0, 'Let him. Maybe they’ll take each other out.'); say('F', 131.0, 3.4, 'Mon ami, zey will not take each other out. Zey will take us out.');
+  say('MM', 127.4, 3.0, 'Let him. Maybe they’ll take each other out.'); say('F', 130.5, 3.4, 'Zey will not kill each other. Zey will kill us.');
 
   shot(135, 142, 'hide', C({ p: [[5.4, 1.4, 1.8], [4.6, 1.45, 1.4]], l: [[3.9, 1.3, -1.3], [3.9, 1.35, -1.3]], fov: [32, 26], hand: 0.3 }), { act: hide, fadeOut: 1.2 });
   lower(135.2, 137.2, 'KIMIKO', 'The Boys', '#ffffff');
-  say('K', 135.6, 2.4, '[signs] We help. Now.', { silent: true }); say('BU', 138.3, 3.6, 'Right. Gear up. We still don’t trust the bastard — we’ve just got a bigger one to hate.');
+  say('K', 135.0, 2.0, '[signs] We help. Now.', { silent: true }); say('BU', 137.3, 3.6, 'Gear up. Same rules — just a bigger bastard to hate.');
 }

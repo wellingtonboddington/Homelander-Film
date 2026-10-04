@@ -22,10 +22,10 @@ export function ch6(x) {
   };
   shot(515, 523, 'sit', C({ p: [[1.2, 1.75, 7.2], [0.4, 1.6, 5.4]], l: [[-0.5, 1.5, -2.2], [-1.2, 1.5, -3]], fov: [42, 36], hand: 0.3 }), { act: (k) => { SIT.screenMode = 1; SIT.alarmOn = 0; room(k); }, holdBlack: 4.5, fadeIn: 1.2 });
   say('N', 519.9, 2.8, 'Stan, you can’t. We’re still standing.');
-  say('E', 522.8, 3.6, 'We’re standing because they allow it. Seven hours. That is what the Seven bought us.');
+  say('E', 522.6, 3.6, 'We’re standing because they allow it. That’s what the Seven bought us.');
   shot(523, 529, 'sit', C({ p: [[-0.2, 1.8, 1.2], [-0.9, 1.7, 0.3]], l: [[-3.4, 1.2, -2.4], [-3.4, 1.15, -2.4]], fov: [34, 26], hand: 0.3 }), {
     act: (k) => { room(k); const T = k.T; ring('edgar', -2.55, 4.15, P.blend(P.stand(T), { sx: 0.4, hx: 0.5, lax: 0.2, rax: 1.0, re: 1.3, raz: -0.3 }, 1)); SIT.screenMode = 1; } });
-  say('E', 523.6, 2.0, 'I’ll sign.'); say('ADV', 526.0, 3.0, 'Compliance noted. Welcome to the Universal Union.', {});
+  say('E', 527.2, 1.4, 'I’ll sign.'); say('ADV', 528.8, 2.6, 'Compliance noted. Welcome to the Union.', {});
   cue(523, 'bell', { m: 62, g: 0.12 }); cue(525, 'horn', { dur: 6, f: 46, g: 0.5 }, 'sit'); cue(528, 'hit', { g: 0.7 }); cue(515, 'melody', { notes: [[0, 57, 3], [1.6, 60, 3], [3.2, 64, 3.4]], g: 0.12 });
 
   /* ---------- Combine Earth ---------- */
@@ -36,7 +36,7 @@ export function ch6(x) {
   NY.gunTrack[6].push([[529, -90, 100, -380], [545, 20, 70, -200], [561, 90, 90, -40]]); NY.gunTrack[7].push([[529, 120, 120, -400], [545, -10, 80, -210], [561, -80, 100, -50]]);
   shot(529, 540, 'ny', C({ p: [[0, 3, 60], [10, 56, 20]], l: [[10, 70, -420], [40, 250, -760]], fov: [50, 46], hand: 0.3 }), { fadeIn: 0.8 });
   loc(529.6, 535, 'New York City — 02:52 EST');
-  say('ADV', 530.2, 4.4, 'Seven hours. Earth is now a province of the Universal Union.'); cue(529, 'horn', { dur: 7, f: 44, g: 0.5 }); cue(529, 'dropship', { dur: 30, g: 0.25 }, 'ny'); cue(532, 'steps', { n: 4, dt: 0.9, g: 0.4 }, 'ny');
+  say('ADV', 531.6, 3.6, 'Seven hours. Earth is now a province of the Union.'); cue(529, 'horn', { dur: 7, f: 44, g: 0.5 }); cue(529, 'dropship', { dur: 30, g: 0.25 }, 'ny'); cue(532, 'steps', { n: 4, dt: 0.9, g: 0.4 }, 'ny');
   cue(529, 'portal', { dur: 12, g: 0.2 });
 
   /* ---------- survivors ---------- */

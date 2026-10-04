@@ -4,6 +4,7 @@ import { BoardWorld, SitWorld, HideWorld, CorrWorld } from './world_interior.js'
 import { AirWorld } from './world_air.js';
 import { kf } from './util.js';
 import { PathB } from './common.js';
+import { estDur } from './lines.js';
 import { ch1 } from './ch1.js';
 import { ch2 } from './ch2.js';
 import { ch3 } from './ch3.js';
@@ -33,18 +34,13 @@ export async function buildFilm(film, progress) {
   await mk('air', AirWorld, 0.9);
 
   const shots = []; film.subs = []; film.overlays = []; film.flashes = []; film.cues = [];
-  const talk = {};
+  const talk = {}; const raw = [];
   const pb = Array.from({ length: 6 }, () => new PathB());
   const x = {
     W, film, pb,
     shot: (t0, t1, world, cam, o = {}) => shots.push({ t0, t1, world, cam, ...o }),
     cue: (t, name, args = {}, world = null) => film.cue(t, name, args, world),
-    say: (key, t0, dur, text, o = {}) => {
-      const [name, color, pitch] = WHO[key];
-      film.subs.push({ t0, t1: t0 + dur, who: o.radio ? name + ' (radio)' : name, color, text, voice: { pitch: pitch > 160 ? 1.35 : pitch < 100 ? 0.65 : 0.9, v: Object.keys(WHO).indexOf(key) } });
-      (talk[key] = talk[key] || []).push([t0 - 0.1, t0 + dur]);
-      if (pitch && !o.silent) film.cue(t0, 'say', { dur: dur * 0.95, pitch, robot: key === 'ADV' || o.radio, g: o.radio ? 0.03 : 0.045 });
-    },
+    say: (key, t0, dur, text, o = {}) => { raw.push({ key, t0, dur, text, o, n: raw.length }); },
     sp: (key, T) => (talk[key] || []).some((r) => T >= r[0] && T <= r[1]),
     chapter: (t0, t1, text, sub) => film.overlays.push({ kind: 'chapter', t0, t1, text, sub }),
     title: (t0, t1, text, sub) => film.overlays.push({ kind: 'title', t0, t1, text, sub }),
@@ -56,6 +52,20 @@ export async function buildFilm(film, progress) {
   ch1(x); await progress(0.92);
   ch2(x); ch3(x); await progress(0.95);
   ch4(x); ch5(x); ch6(x);
+  // ---- dialogue: re-flow so every line has room for its full speech, and lines never overlap ----
+  raw.sort((p, q) => p.t0 - q.t0 || p.n - q.n);
+  let prevEnd = -1; const moved = [];
+  for (const l of raw) {
+    const [name, color, pitch] = WHO[l.key];
+    const need = estDur(l.text, 3.1) + 0.1;
+    const t0 = Math.max(l.t0, prevEnd + 0.18), t1 = t0 + Math.max(l.dur, need);
+    prevEnd = t1; if (t0 - l.t0 > 0.5) moved.push(`${l.key}@${l.t0.toFixed(1)}→${t0.toFixed(1)}`);
+    film.subs.push({ t0, t1, key: l.key, who: l.o.radio ? name + ' (radio)' : name, color, text: l.text, speak: !l.o.silent, voice: {} });
+    (talk[l.key] = talk[l.key] || []).push([t0 - 0.1, t1]);
+    if (pitch && !l.o.silent) film.cue(t0, 'say', { dur: Math.min(t1 - t0, need) * 0.95, pitch, robot: l.key === 'ADV' || l.o.radio, g: l.o.radio ? 0.03 : 0.045 });
+  }
+  if (moved.length) console.info('dialogue shifted:', moved.join(', '));
+  film.speech.setLines(film.subs);
   W.ny.Spath = pb.map((b, i) => (b.k.length ? b.build() : null));
   W.ny.finalize();
   shots.sort((a, b) => a.t0 - b.t0);

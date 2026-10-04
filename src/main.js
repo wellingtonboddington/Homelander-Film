@@ -24,6 +24,8 @@ async function init(qname) {
   film.audio = new Audio(film);
   film.start();
   film.frame(0);
+  film.speech.loadVoices();
+  const tts = $('tts'); tts.checked = film.speech.supported; tts.disabled = !film.speech.supported; if (!film.speech.supported) tts.parentElement.style.opacity = 0.4;
 }
 
 function wireUI() {
@@ -47,6 +49,7 @@ function wireUI() {
     else if (e.key === 'f' || e.key === 'F') fs();
     else if (e.key === 'm' || e.key === 'M') $('bmute').click();
     else if (e.key === 'c' || e.key === 'C') $('bcc').click();
+    else if (e.key === 'v' || e.key === 'V') { film.speech.enable(!film.speech.enabled); }
     showHud();
   });
 }
@@ -58,8 +61,8 @@ function wireUI() {
   $('play').textContent = 'PLAY'; $('play').disabled = false;
   film.onEnd = () => { $('endcard').style.display = 'flex'; };
   const go = () => {
-    film.quality.speech = $('tts').checked;
-    film.audio.start(film.quality.speech);
+    film.audio.start();
+    film.speech.enable($('tts').checked);
     $('start').style.opacity = 0; setTimeout(() => ($('start').style.display = 'none'), 650);
     film.play();
   };

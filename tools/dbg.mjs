@@ -1,0 +1,12 @@
+import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'] });
+const page = await browser.newPage({ viewport: { width: 480, height: 200 } });
+page.on('console', (m) => { if (m.type() === 'info') console.log(m.text()); });
+await page.goto('file://' + process.cwd() + '/index.html?q=saver&debug=1');
+await page.waitForFunction(() => window.__film && window.__film.shots.length > 0, null, { timeout: 120000 });
+const subs = await page.evaluate(() => window.__film.subs.map((s) => [+s.t0.toFixed(1), +s.t1.toFixed(1), s.key, s.text.length]));
+const raw = await page.evaluate(() => window.__film.subs.length);
+const CH = [46, 142, 232, 300, 350, 410, 515, 600];
+const bad = subs.filter(([a, b]) => { const c = CH.find((e) => a < e); return b > c + 0.01; });
+console.log('lines crossing a chapter boundary:', JSON.stringify(bad));
+await browser.close();

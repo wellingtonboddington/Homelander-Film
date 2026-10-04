@@ -33,37 +33,35 @@ export function ch4(x) {
   /* ---- establishing ---- */
   shot(300, 309, 'sit', C({ p: orbit([0, 0, 0], 7.4, 0.5, 1.15, 3.0, 2.2), l: [0, 1.4, -1.5], fov: [44, 42], hand: 0.2 }), { act: room, holdBlack: 3.9, fadeIn: 1.4 });
   cue(300, 'siren', { dur: 14, g: 0.04 }, 'sit');
-  say('G', 304.4, 4.6, 'We’ve lost the Northeast corridor. Sixty percent of First Armored. The Navy can’t get within fifty miles.');
-  say('N', 309.2, 2.2, 'And the civilians?');
+  say('G', 304.0, 3.6, 'We’ve lost the Northeast corridor. First Armored is gone.');
 
   /* ---- the broadcast ---- */
   SIT.alarmOn = 1;
   shot(309, 318, 'sit', C({ p: [[0.5, 1.5, 4.2], [0.2, 1.7, -0.8]], l: [[0, 2.8, -10], [0, 2.9, -10]], fov: [50, 40], hand: 0.3 }), { act: (k) => { SIT.screenMode = k.T > 311 ? 1 : 0; room(k); } });
-  say('G', 309.9, 3.2, 'They’re not killing everyone. That’s what scares me.');
+  say('G', 307.4, 3.2, 'They’re not killing everyone. That’s what scares me.');
   cue(311, 'horn', { dur: 5, f: 48, g: 0.55 }, 'sit'); cue(311, 'static', { dur: 0.6, g: 0.12 }, 'sit');
-  say('ADV', 312.4, 3.4, 'Citizens of Earth. You are subjects of the Universal Union. Cease resistance.');
-  say('ADV', 316.0, 3.0, 'Surrender your arms and your leaders. Compliance will be rewarded.');
+  say('ADV', 311.2, 3.4, 'Citizens of Earth. You are subjects of the Universal Union. Cease resistance.');
+  say('ADV', 315.9, 3.0, 'Surrender your leaders. Resistance will be corrected.');
 
   shot(318, 326, 'sit', C({ p: [[-5.5, 1.6, 3.5], [-3.5, 1.65, 3.2]], l: [[0.5, 1.6, -3], [1.4, 1.6, -3]], fov: [38, 34], hand: 0.3 }), { act: (k) => { SIT.screenMode = 1; room(k); } });
-  say('ADV', 318.2, 2.6, 'Resistance will be… corrected.');
-  say('G', 321.2, 3.4, 'The President has authorized tactical weapons. Three warheads. Manhattan.');
-  say('N', 324.6, 1.6, 'On our own city?!');
+  say('G', 320.4, 3.4, 'The President authorized tactical weapons. Three warheads. Manhattan.');
+  say('N', 324.2, 1.6, 'On our own city?!');
   cue(318, 'heartbeat', { n: 8 }, 'sit');
 
   shot(326, 334, 'sit', C({ p: [[5.8, 1.5, -1.0], [4.2, 1.55, 0.0]], l: [[-2.5, 1.55, -3.6], [-2.8, 1.55, -3.4]], fov: [34, 32], hand: 0.3 }), { act: (k) => { SIT.screenMode = 0; room(k); } });
-  say('G', 326.2, 3.0, 'Two million people are dying anyway, Congresswoman.');
-  say('E', 329.4, 4.2, 'Before anyone ends New York… perhaps Vought could do some talking.');
+  say('G', 326.5, 3.0, 'Two million are dying anyway, Congresswoman.');
+  say('E', 330.2, 4.2, 'Before anyone ends New York… let Vought do some talking.');
 
   /* ---- Homelander enters ---- */
   shot(334, 342, 'sit', C({ p: [[0.5, 1.45, -4.2], [0.2, 1.5, -3.6]], l: [[0, 1.6, 8], [0, 1.6, 6]], fov: [38, 34], hand: 0.3 }), {
     act: (k) => { room(k, { home: (kk) => { const lt = kk.lt; const z = lerp(10.5, 5.4, smooth(lt / 4.2)); if (lt < 4.4) SIT.put('homelander', 0, 0, z, Math.PI, P.blend(P.walk(lt * 4.4, 0.7), P.hero(kk.T), 0.3), { flow: 0.15 }); else homeAt(0, z, Math.PI, kk.T); } }); } });
-  say('H', 336.4, 2.4, 'It hurt.'); say('H', 339.0, 3.2, 'Nothing hurts me. And that thing… hurt me.');
+  say('H', 335.6, 1.4, 'It hurt.'); say('H', 338.0, 3.2, 'Nothing hurts me. And that thing hurt me.');
   cue(334, 'door', {}, 'sit');
 
   shot(342, 350, 'sit', C({ p: [[-1.7, 1.66, 2.5], [-0.9, 1.68, 3.1]], l: [[0.2, 1.7, 5.4], [0.2, 1.72, 5.4]], fov: [30, 24], hand: 0.3 }), {
     fadeOut: 1.2, act: (k) => { room(k, { home: (kk) => homeAt(0.2, 5.4, Math.PI * 0.95, kk.T) }); const e = SIT.actors.homelander; e.face(-0.3); e.heat(k.T > 347.5 && k.T < 349.5); } });
-  say('E', 342.4, 3.4, 'They’ve offered terms. A ceasefire. A seat at the table.');
-  say('H', 345.4, 2.6, 'Talk, then. I’ll go and kill them.');
+  say('E', 342.6, 3.4, 'They’ve offered terms. A ceasefire. A seat at the table.');
+  say('H', 346.6, 2.4, 'I’ll go and kill them.');
   cue(347.6, 'laser', { dur: 2, g: 0.15 }, 'sit'); cue(349, 'whoosh', { dur: 1.2, g: 0.4 }, 'sit');
 
   /* ================== HOUR 05 — BELOW ================== */

@@ -33,14 +33,14 @@ export function ch5(x) {
       w.put(n, px, 0, pz, N, pose, { flow: 0.25, wind: 1.3, scorch: 0 }); }
   };
   shot(410, 420, 'ny', C({ p: [[0, 1.35, -17], [0, 1.65, -21.5]], l: [[0, 9.5, -200], [0, 11, -190]], fov: [42, 36], hand: 0.3 }), { act: formation, holdBlack: 4.4, fadeIn: 1.2 });
-  say('H', 412.4, 2.8, 'Seven of us. Let them look.'); say('SB', 415.4, 2.2, 'Big. I like big.'); say('S', 417.8, 2.2, 'Has anyone seen Kevin?');
+  say('H', 412.0, 2.6, 'Seven of us. Let them look.'); say('SB', 414.6, 2.2, 'Big. I like big.'); say('S', 416.8, 2.2, 'Has anyone seen Kevin?');
   cue(410.5, 'horn', { dur: 5, f: 47, g: 0.5 }); cue(411, 'steps', { n: 8, dt: 0.62, g: 0.45 }, 'ny'); cue(410, 'riser', { dur: 10, g: 0.1 }); cue(416, 'rotor', { dur: 6, g: 0.1 }, 'ny');
 
   /* ---------- A-Train ---------- */
   const aT0 = 422.0, aT1 = 422.95; const aPos = (T) => { const u = clamp((T - aT0) / (aT1 - aT0)); return [-8.3, lerp(0, 2.2, u), lerp(-34, -106, u)]; };
   shot(420, 421.8, 'ny', C({ p: [[-3.5, 1.1, -26], [-4.0, 1.15, -28]], l: [[-7.8, 1.0, -34], [-8.2, 1.0, -34.6]], fov: [34, 28], hand: 0.3 }), {
     act: (k) => { formation(k, ['atrain']); k.w.put('atrain', -8.3, 0, -34.8, N, P.crouchAim(k.T)); k.w.actors.atrain.pose({ ry: -0.4, rx: 0.35, sx: 0.25, lax: 0.9, rax: -0.6, le: 1.2, re: 1.2, llh: 1.1, rlh: -0.5, lk: 1.4, rk: 0.4 }); } });
-  say('M', 420.1, 1.6, '…Not since the pods.'); say('A', 420.9, 1.0, 'Nobody falls.');
+  say('M', 419.0, 1.8, 'Not since the pods.'); say('A', 421.0, 1.2, 'Nobody falls.');
   const sprintTrail = (u) => { const p = aPos(aT0 + u * (aT1 - aT0)); return [p[0] + 0.3, p[1] + 1.0, p[2]]; };
   NY.fx.trail(sprintTrail, aT0, aT1 + 0.1, 40, 1.2, [0.8, 0.95, 1, 0.9], [0.3, 0.6, 1, 0], 0.9);
   NY.beams.add({ a: [-8.3, 1.0, -34], b: [-8.3, 1.4, -106], t0: aT0, dur: 1.0, w: 0.35, color: 0x9fd8ff, opacity: 0.8 });
@@ -48,7 +48,6 @@ export function ch5(x) {
   cue(aT0 - 0.15, 'whoosh', { dur: 1.0, g: 0.5 }, 'ny'); cue(aT1, 'hit', { g: 0.9 }); cue(aT1 + 0.3, 'steps', { n: 2, dt: 0.5, g: 0.8 }, 'ny');
   shot(421.8, 423.3, 'ny', C({ p: (u, k) => { const a = aPos(k.T); return [3.5, 1.5, a[2] + 7]; }, l: (u, k) => aPos(k.T), fov: [48, 62], hand: 0.2, shake: 0.08 }), {
     act: (k) => { formation(k, ['atrain']); const T = k.T; if (T < aT1) k.w.put('atrain', ...aPos(T), N, P.sprint(T * 34)); else k.w.put('atrain', -8.3, 0.3, -106, N, P.die(clamp((T - aT1) / 0.5))); } });
-  say('H', 421.8, 1.2, 'A-Train, wait—');
 
   shot(423.3, 428, 'ny', C({ p: [[26, 7, -92], [30, 9, -88]], l: [[-2, 10, -112], [-4, 8, -110]], fov: [42, 40], hand: 0.5, shake: 0.12, shakeEnv: (lt) => Math.exp(-lt * 0.8) }), {
     act: (k) => { formation(k, ['atrain']); k.w.put('atrain', -8.3, 0.3, -104, 1.0, P.dead()); } });
@@ -160,10 +159,10 @@ export function ch5(x) {
   NY.fx.dustBurst(0, 1, -175, 488.2, 4, 30); NY.flashL.add(0, 4, -171, 488.2, 0.9, 5000, 0x9fe0ff);
   const front = (k, o = {}) => { const T = k.T, w = k.w; w.put('homelander', 0.4, 0, -48, N, P.blend(P.hero(T), { hx: 0.15, sx: 0.08 }, 0.5), { flow: 0.15, scorch: 0.9 }); w.put('starlight', -3.8, 0, -45, N + 0.5, P.kneel(T)); w.actors.homelander.face(o.smile ?? -0.3); };
   shot(481, 487, 'ny', C({ p: [[-1.0, 1.1, -43], [0.4, 1.4, -44.5]], l: [[0, 28, -140], [0, 20, -150]], fov: [44, 38], hand: 0.3 }), { act: front });
-  say('ADV', 481.6, 3.4, 'Specimen designation: superior. Your biology is… remarkable.'); cue(479, 'horn', { dur: 6, f: 44, g: 0.5 }); cue(479, 'portal', { dur: 10, g: 0.3 }); cue(488.2, 'stomp', { g: 1.2 }, 'ny');
+  say('ADV', 480.8, 3.4, 'Specimen designation: superior. Your biology is… remarkable.'); cue(479, 'horn', { dur: 6, f: 44, g: 0.5 }); cue(479, 'portal', { dur: 10, g: 0.3 }); cue(488.2, 'stomp', { g: 1.2 }, 'ny');
   cue(480, 'dropship', { dur: 20, g: 0.3 }, 'ny');
   shot(487, 493, 'ny', C({ p: [[3.2, 1.65, -42], [2.0, 1.68, -43.2]], l: [[0.4, 1.7, -48], [0.4, 1.72, -48]], fov: [28, 22], hand: 0.3 }), { act: (k) => front(k, { smile: 0.35 }) });
-  say('ADV', 487.2, 3.8, 'The Union does not destroy what it can use. Kneel, and be elevated beyond your kind.'); say('S', 491.2, 1.8, 'John… they’ll make you a thing.');
+  say('ADV', 484.6, 4.2, 'The Union does not destroy what it can use. Kneel, and be elevated.'); say('S', 489.2, 2.4, 'John… they’ll make you a thing.');
 
   /* ---------- the last stand ---------- */
   const hk2 = [[494.6, 0.4, 1.0, -48], [495.4, 0, 8, -80], [496.8, 0, 17, -122], [497.6, 0, 18, -130.5], [499, 0, 40, -150]];
@@ -176,7 +175,7 @@ export function ch5(x) {
     act: (k) => { const T = k.T, w = k.w;
       w.put('starlight', -3.8, 0, -45, N, P.kneel(T));
       if (T < 494.6) w.put('homelander', 0.4, 0, -48, N, P.hero(T), { flow: 0.2, scorch: 0.9 }); else { const h = at(hk2, T); w.put('homelander', h[0], h[1], h[2], N, P.fly(T, 0), { flow: 0.85, heat: T > 496.8 && T < 497.6, scorch: 0.9 }); } } });
-  say('H', 493.4, 1.6, 'I don’t kneel.'); say('H', 495.0, 1.4, 'They kneel to me.');
+  say('H', 492.2, 1.6, 'I don’t kneel.'); say('H', 494.1, 1.8, 'They kneel to me.');
   cue(495.2, 'whoosh', { dur: 1.6, g: 0.5 }, 'ny'); cue(496.2, 'strider_fire', {}, 'ny'); cue(496.9, 'laser', { dur: 0.8, g: 0.3 }, 'ny'); cue(493, 'riser', { dur: 4.6, g: 0.18 });
 
   NY.beams.add({ a: [-20, 690, -430], b: at(hk3, 504.5), t0: 504.25, dur: 0.9, w: 11, color: 0xcff0ff, opacity: 0.95 }); NY.beams.add({ a: [-20, 690, -430], b: at(hk3, 504.5), t0: 504.25, dur: 0.9, w: 26, color: 0x6fd0ff, opacity: 0.35 });

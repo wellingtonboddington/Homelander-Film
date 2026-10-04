@@ -34,21 +34,11 @@ export class Audio {
     this.film.cues.sort((a, b) => a.t - b.t);
     this._steps();
     this.reset(this.film.T);
-    if (this.speech && window.speechSynthesis) {
-      this.film.onLine = (l) => { try { speechSynthesis.cancel(); if (l && l.speak !== false && this.playing) this._tts(l); } catch (e) {} };
-    }
     this.playing = true;
     if (ctx.state === 'suspended') ctx.resume();
   }
-  _tts(l) {
-    const u = new SpeechSynthesisUtterance(l.text.replace(/\[.*?\]/g, ''));
-    const vs = speechSynthesis.getVoices().filter((v) => /^en/i.test(v.lang));
-    const sp = l.voice || {};
-    if (vs.length) u.voice = vs[(sp.v ?? 0) % vs.length];
-    u.pitch = sp.pitch ?? 1; u.rate = sp.rate ?? 1.05; u.volume = 0.9;
-    speechSynthesis.speak(u);
-  }
-  setPlaying(p) { this.playing = p; if (!this.ctx) return; if (p) { this.ctx.resume(); this.reset(this.film.T); } else { this.ctx.suspend(); window.speechSynthesis && speechSynthesis.cancel(); } }
+  setPlaying(p) { this.playing = p; if (!this.ctx) return; if (p) { this.ctx.resume(); this.reset(this.film.T); } else { this.ctx.suspend(); } }
+  duck(on) { if (this.master && !this.muted) this.master.gain.setTargetAtTime(on ? 0.55 : 0.85, this.ctx.currentTime, 0.15); }
   setMute(m) { this.muted = m; if (this.master) this.master.gain.value = m ? 0 : 0.85; }
   _newBus() {
     if (this.bus) { try { this.bus.disconnect(); } catch (e) {} }
@@ -62,7 +52,6 @@ export class Audio {
     this.cueI = lo; this.cueT = T;
     const s = this.steps; lo = 0; hi = s.length; while (lo < hi) { const m = (lo + hi) >> 1; if (s[m] < T) lo = m + 1; else hi = m; }
     this.stepI = lo;
-    window.speechSynthesis && speechSynthesis.cancel();
   }
   _steps() {
     const out = []; let t = 0;
@@ -225,7 +214,7 @@ export class Audio {
       case 'bell': return this._bell(t, mtof(a.m || 74), a.g || 0.12);
       case 'stab': return this._brass(t, mtof(a.m || 50), a.dur || 2.2, a.g || 0.13);
       case 'melody': return this.melody(t, a.notes, a.g || 0.14, a.type || 'triangle');
-      case 'say': return this.say(t, a.dur || 2, a.pitch || 120, a.g || 0.04, a.robot);
+      case 'say': if (this.film.speech && this.film.speech.enabled) return; return this.say(t, a.dur || 2, a.pitch || 120, a.g || 0.04, a.robot);
       case 'fire': return this.noise(t, a.dur || 6, { type: 'bandpass', f0: 900, q: 0.4, gain: a.g || 0.08, a: 1, hold: (a.dur || 6) - 1 });
       case 'impactdist': return this.explosion(t, a.s || 0.5);
       default: return;

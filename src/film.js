@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { FXU } from './fx.js';
 import { clamp, smooth } from './util.js';
+import { Speech } from './speech.js';
 
 export const ASPECT = 2.39;
 
@@ -40,6 +41,7 @@ export class Film {
     this.cur = null; this.curWorld = null;
     this.camFov = 40;
     this.audio = null;
+    this.speech = new Speech(this); this.holdLine = null; this.talkingNow = null;
     this._lastTs = 0; this._lastRender = 0; this._intervals = [];
     this.scale = quality.scale;
     this.layout();
@@ -78,6 +80,7 @@ export class Film {
   seek(T) {
     this.T = clamp(T, 0, this.total - 0.001);
     this.audio && this.audio.reset(this.T);
+    this.speech.reset(this.T);
     this._renderedSub = null;
   }
 
@@ -137,12 +140,12 @@ export class Film {
     // subtitles
     let line = null;
     for (const s of this.subs) if (T >= s.t0 && T <= s.t1) { line = s; }
+    if (this.holdLine && (!line || line === this.holdLine || T >= this.holdLine.t1)) line = this.holdLine;
     const sk = line ? line.t0 + line.text : '';
     if (this._renderedSub !== sk) {
       this._renderedSub = sk;
       d.sub.innerHTML = line ? `<span class="who" style="color:${line.color || '#ffd24a'}">${line.who ? line.who + ':' : ''}</span> <span class="tx">${line.text}</span>` : '';
       d.sub.style.display = (line && this.captions !== false) ? 'block' : 'none';
-      if (this.onLine) this.onLine(line);
     }
     // hud time
     if (d.time) { const s = this._fmt(T) + ' / ' + this._fmt(this.total); if (d.time._v !== s) { d.time._v = s; d.time.textContent = s; } }
@@ -157,8 +160,8 @@ export class Film {
   _set(el, key, val, fn) { if (el._v !== val) { el._v = val; fn(); } }
   _fmt(t) { t = Math.max(0, t | 0); return (t / 60 | 0) + ':' + String(t % 60).padStart(2, '0'); }
 
-  play() { this.playing = true; this._lastTs = performance.now(); this.audio && this.audio.setPlaying(true); this.dom.root.classList.add('playing'); }
-  pause() { this.playing = false; this.audio && this.audio.setPlaying(false); this.dom.root.classList.remove('playing'); }
+  play() { this.playing = true; this._lastTs = performance.now(); this.audio && this.audio.setPlaying(true); this.speech.resume(); this.dom.root.classList.add('playing'); }
+  pause() { this.playing = false; this.audio && this.audio.setPlaying(false); this.speech.pause(); this.dom.root.classList.remove('playing'); }
   toggle() { this.playing ? this.pause() : this.play(); }
 
   start() {
@@ -168,9 +171,12 @@ export class Film {
       if (this._autoPaused) { this._autoPaused = false; this.play(); }
       const dt = Math.max(0, Math.min(0.25, (now - this._lastTs) / 1000)); this._lastTs = now;
       if (this.playing) {
-        this.T += dt;
+        this.T += dt * this.speech.timeScale(this.T, dt);
         if (this.T >= this.total) { this.T = this.total - 0.001; this.pause(); this.onEnd && this.onEnd(); }
       }
+      this.speech.update(this.T, this.playing);
+      if (this.audio) { const sk = this.speech.enabled && !!this.speech.speakingKey; if (sk !== this._duck) { this._duck = sk; this.audio.duck(sk); } }
+      this.talkKeys = this.speech.enabled ? (this.speech.speakingKey ? [this.speech.speakingKey] : []) : this.subs.filter((s) => this.T >= s.t0 && this.T <= s.t1).map((s) => s.key);
       const minInt = 1000 / this.quality.fps - 4;
       if (!this.playing && !this._dirty) return;
       if (now - this._lastRender < minInt && !this._dirty) return;
