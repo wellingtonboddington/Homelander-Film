@@ -1,0 +1,10 @@
+import { chromium } from 'playwright-core';
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox', '--autoplay-policy=no-user-gesture-required'] });
+const page = await browser.newPage({ viewport: { width: 640, height: 268 } });
+page.on('pageerror', (e) => console.log('PAGEERROR', e.message.slice(0, 200)));
+await page.goto('file://' + process.cwd() + '/index.html?q=saver');
+await page.waitForFunction(() => document.getElementById('play') && !document.getElementById('play').disabled, null, { timeout: 120000 });
+await page.click('#play');
+const r = await page.evaluate(() => { const f = window.__film; f.pause(); const bad = []; for (let T = 0; T <= 600.2; T += 0.37) { try { f.audio.reset(T); f.audio.sync(T, true); } catch (e) { bad.push([+T.toFixed(2), e.message.slice(0, 80)]); } } return bad.slice(0, 8); });
+console.log(JSON.stringify(r));
+await browser.close();
